@@ -1,0 +1,60 @@
+﻿@model SpaceRealty.Models.Realtor
+@{
+    ViewData["Title"] = "Login";
+}
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+}
+
+<h2>Login</h2>
+@using (Html.BeginForm("AuthUser", "Home", FormMethod.Post))
+{
+    <div class="container">
+        <label><b>Username</b></label>
+        @Html.TextBoxFor(m => m.userName)
+        <label><b>Password</b></label>
+        @Html.PasswordFor(m => m.password)
+        <input type="submit" value="Login" id="loginButton" />
+        <input type="checkbox" value="New User?" title="Enter additional info to sign up" id="newUserCheck"/>
+        <div id="newUserInfo">
+            <label>First Name</label>
+            @Html.TextBoxFor(m => m.firstName)
+            <label>Last Name</label>
+            @Html.TextBoxFor(m => m.lastName)
+            <label>Email</label>
+            @Html.TextBoxFor(m => m.email)
+            <input type="submit" value="Create Account" />
+        </div>
+    </div>
+}
+
+<script>
+    //document.onload = function () {
+    //    function newUserCheck(checkbox) {
+    //        if (checkbox.checked) {
+    //            document.getElementById("newUserInfo").style.display = "block";
+    //            document.getElementById("loginButton").style.display = "none";
+    //        }
+    //        else {
+    //            document.getElementById("newUserInfo").style.display = "none";
+    //            document.getElementById("loginButton").style.display = "block";
+    //        }
+
+    //    };
+    //};
+    //$(document).ready(function () {
+    //    //your code here
+    //    $("#newUserCheck").click(function () {
+    //        debugger;
+    //        $("#newUserInfo").toggle(this.checked);
+    //        //if ($("#newUserCheck").checked) {
+    //        //    $("#newUserInfo").show();
+    //        //    $("#loginButton").css("display", "none");
+    //        //}
+    //        //else {
+    //        //    $("#newUserInfo").css("display", "none");
+    //        //    $("loginButton").css("display", "block");
+    //        //}
+    //    });
+    //});
+</script>
