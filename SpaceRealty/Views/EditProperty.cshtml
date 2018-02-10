@@ -1,0 +1,28 @@
+﻿@model SpaceRealty.Models.House
+@{
+    ViewData["Title"] = "Property";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width" />
+    <title>Property</title>
+</head>
+<body>
+    @using (Html.BeginForm("EditProperty", "Property", FormMethod.Post))
+    {
+        <div id="editPartial">
+            @Html.Partial("_PropertyFields", Model)
+            <input type="submit" value="Edit Property" />
+        </div>
+    }
+</body>
+</html>
+<script>
+    window.onload = function () {
+        document.getElementById("MLSNum").setAttribute("readonly", true)
+    }
+</script>

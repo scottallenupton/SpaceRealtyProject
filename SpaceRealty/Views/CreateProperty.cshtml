@@ -1,0 +1,23 @@
+﻿@model SpaceRealty.Models.House
+@{
+    ViewData["Title"] = "Property";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <meta name="viewport" content="width=device-width" />
+    <title>Property</title>
+</head>
+<body>
+    @using (Html.BeginForm("CreateProperty", "Property", FormMethod.Post))
+    {
+        <div id="createPartial">
+            @Html.Partial("_PropertyFields", Model)
+            <input type="submit" value="Create Property" />
+        </div>
+    }
+</body>
+</html>

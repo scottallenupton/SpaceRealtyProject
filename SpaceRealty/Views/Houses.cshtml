@@ -2,7 +2,9 @@
 @{
     ViewData["Title"] = "Houses";
 }
-
+@section Scripts{
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+}
 
 <html>
 <head>
@@ -25,71 +27,27 @@
     <title>Houses</title>
 </head>
 <body>
-    <input id="searchText" type="text" placeholder="Search..." style="text-align:center;"/>
-    <input type="submit" value="Go" />
-    <table>
-        <tr>
-            <th>
-                MLS #
-            </th>
-            <th>
-                City
-            </th>
-            <th>
-                State
-            </th>
-            <th>
-                ZipCode
-            </th>
-            <th>
-                Bedrooms
-            </th>
-            <th>
-                Bathrooms
-            </th>
-            <th>
-                Square Feet
-            </th>
-            <th>
-                Edit
-            </th>
-            <th>
-                Delete
-            </th>
-        </tr>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @item.MLSNum
-                </td>
-                <td>
-                    @item.City
-                </td>
-                <td>
-                    @item.State
-                </td>
-                <td>
-                    @item.ZipCode
-                </td>
-                <td>
-                    @item.Bedrooms
-                </td>
-                <td>
-                    @item.Bathrooms
-                </td>
-                <td>
-                    @item.SquareFeet
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "EditHouse", "Property", item)
-                </td>
-                <td>
-                    @Html.ActionLink("Delete", "DeleteHouse", "Property", new { houseId = item.MLSNum })
-                </td>
-            </tr>
-        }
-    </table>
+    <input id="searchText" type="text" placeholder="Search..." onkeyup="updateTable();" />
+    <div id="housesTable">
+        @Html.Partial("_HousesList", Model)
+    </div>
     @Html.ActionLink("Add New Property", "AddProperty", "Property")
 </body>
 </html>
+<script type="text/javascript">
+    function updateTable() {
+        var sdata = String($("#searchText").val());
+        var target = '@Url.Action("SearchHouses", "Property")' + '?searchTerm=' + sdata
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            dataType: "html",
+            contentType: "application/json; charset=utf-8",
+            url: target,
+            success: function (result) {
+                $("#housesTable").html(result);
+            }
+        });
+    };
+</script>

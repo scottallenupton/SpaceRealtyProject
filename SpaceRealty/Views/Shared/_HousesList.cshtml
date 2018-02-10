@@ -1,0 +1,67 @@
+﻿@model List<SpaceRealty.Models.House>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<table>
+    <tr>
+        <th>
+            MLS #
+        </th>
+        <th>
+            City
+        </th>
+        <th>
+            State
+        </th>
+        <th>
+            ZipCode
+        </th>
+        <th>
+            Bedrooms
+        </th>
+        <th>
+            Bathrooms
+        </th>
+        <th>
+            Square Feet
+        </th>
+        <th>
+            Edit
+        </th>
+        <th>
+            Delete
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.MLSNum
+            </td>
+            <td>
+                @item.City
+            </td>
+            <td>
+                @item.State
+            </td>
+            <td>
+                @item.ZipCode
+            </td>
+            <td>
+                @item.Bedrooms
+            </td>
+            <td>
+                @item.Bathrooms
+            </td>
+            <td>
+                @item.SquareFeet
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditHouse", "Property", item)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteHouse", "Property", new { houseId = item.MLSNum })
+            </td>
+        </tr>
+    }
+</table>

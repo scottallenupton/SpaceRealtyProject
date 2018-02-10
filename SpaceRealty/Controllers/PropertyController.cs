@@ -18,22 +18,15 @@ namespace SpaceRealty.Controllers
         public IActionResult AddProperty()
         {
             House newListing = new House();
-            return View("~/Views/Property.cshtml", newListing);
+            return View("~/Views/CreateProperty.cshtml", newListing);
         }
 
-        public IActionResult SubmitProperty(House house)
+        public IActionResult CreateProperty(House house)
         {
             List<House> Properties;
             using (IPropertyRepository propRep = new PropertyRepository())
             {
-                if (!house.Edit)
-                {
-                    propRep.CreateHouse(house);
-                }
-                else
-                {
-                    propRep.EditHouse(house);
-                }
+                propRep.CreateHouse(house);
                 Properties = propRep.PopulateHouses();
             }
             return View("~/Views/Houses.cshtml", Properties);
@@ -41,22 +34,47 @@ namespace SpaceRealty.Controllers
 
         public IActionResult EditHouse(House selectedHouse)
         {
-            return View("~/Views/Property.cshtml", selectedHouse);
+            return View("~/Views/EditProperty.cshtml", selectedHouse);
         }
+        public IActionResult EditProperty(House house)
+        {
+            List<House> Properties;
+            using (IPropertyRepository propRep = new PropertyRepository())
+            {
+                propRep.EditHouse(house);
+                Properties = propRep.PopulateHouses();
+            }
+            return View("~/Views/Houses.cshtml", Properties);
+        }
+
 
         public IActionResult DeleteHouse(int houseId)
         {
+            List<House> Properties;
             using (IPropertyRepository propRep = new PropertyRepository())
             {
                 propRep.DeleteHouse(houseId);
+                Properties = propRep.PopulateHouses();
             }
-            return RedirectToAction("Request");
+            return View("~/Views/Houses.cshtml", Properties);
         }
 
-        //the table itself should be a partial view
-        public IActionResult SearchHouses(List<House> houses, string searchTerm)
+        public IActionResult SearchHouses(string searchTerm)
         {
-            return View("~/Views/Houses.cshtml", houses);
+            List<House> Properties;
+            using (IPropertyRepository propRep = new PropertyRepository())
+            {
+                Properties = propRep.PopulateHouses();
+            }
+            if (searchTerm != "" && searchTerm != null)
+            {
+                Properties = Properties.Where(p => p.MLSNum.ToString().Contains(searchTerm) ||
+                p.City.Contains(searchTerm) || p.State.Contains(searchTerm) ||
+                p.ZipCode.ToString().Contains(searchTerm) || p.Bedrooms.ToString().Contains(searchTerm) ||
+                p.Bathrooms.ToString().Contains(searchTerm) || p.SquareFeet.ToString().Contains(searchTerm)).ToList();
+            }
+
+            return PartialView("_HousesList", Properties);
         }
     }
 }
