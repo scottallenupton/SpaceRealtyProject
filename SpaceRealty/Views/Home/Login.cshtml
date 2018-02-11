@@ -1,0 +1,43 @@
+﻿@model SpaceRealty.Models.Realtor
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+@using (Html.BeginForm("Home", "Home", FormMethod.Post))
+{
+    <div class="container">
+        <div class="form-group">
+            <label><b>Username</b></label>
+            @Html.TextBoxFor(m => m.userName)
+        </div>
+        <div class="form-group">
+            <label><b>Password</b></label>
+            @Html.PasswordFor(m => m.password)
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Login" id="loginButton" />
+            <label for="newUSerCheck">New User?</label>
+            <input type="checkbox" title="Enter additional info to sign up" id="newUserCheck" onclick="checkNewUser();"/>
+        </div>
+        <div id="newUserInfo" class="form-group">
+            <label>First Name</label>
+            @Html.TextBoxFor(m => m.firstName)
+            <label>Last Name</label>
+            @Html.TextBoxFor(m => m.lastName)
+            <label>Email</label>
+            @Html.TextBoxFor(m => m.email)
+            <input type="submit" value="Create Account" />
+        </div>
+    </div>
+}
+
+<script>
+    window.onload = function () {
+        $("#newUserInfo").hide();
+    };
+    function checkNewUser() {
+        $("#newUserInfo").toggle();
+        $("#loginButton").toggle();
+    };
+</script>

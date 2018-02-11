@@ -15,10 +15,10 @@ namespace SpaceRealty.Controllers
             return View();
         }
 
-        public IActionResult AddProperty()
+        public IActionResult CreateHouse()
         {
             House newListing = new House();
-            return View("~/Views/CreateProperty.cshtml", newListing);
+            return View("~/Views/Property/CreateProperty.cshtml", newListing);
         }
 
         public IActionResult CreateProperty(House house)
@@ -29,12 +29,12 @@ namespace SpaceRealty.Controllers
                 propRep.CreateHouse(house);
                 Properties = propRep.PopulateHouses();
             }
-            return View("~/Views/Houses.cshtml", Properties);
+            return View("~/Views/Property/Houses.cshtml", Properties);
         }
 
         public IActionResult EditHouse(House selectedHouse)
         {
-            return View("~/Views/EditProperty.cshtml", selectedHouse);
+            return View("~/Views/Property/EditProperty.cshtml", selectedHouse);
         }
         public IActionResult EditProperty(House house)
         {
@@ -44,7 +44,7 @@ namespace SpaceRealty.Controllers
                 propRep.EditHouse(house);
                 Properties = propRep.PopulateHouses();
             }
-            return View("~/Views/Houses.cshtml", Properties);
+            return View("~/Views/Property/Houses.cshtml", Properties);
         }
 
 
@@ -56,7 +56,7 @@ namespace SpaceRealty.Controllers
                 propRep.DeleteHouse(houseId);
                 Properties = propRep.PopulateHouses();
             }
-            return View("~/Views/Houses.cshtml", Properties);
+            return View("~/Views/Property/Houses.cshtml", Properties);
         }
 
         public IActionResult SearchHouses(string searchTerm)

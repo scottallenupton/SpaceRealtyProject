@@ -13,19 +13,19 @@ namespace SpaceRealty.Controllers
     {
         public IActionResult Index()
         {
-            return View("~/Views/Login.cshtml");
+            return View("~/Views/Home/Login.cshtml");
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Application description page.";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Message"] = "Contact page.";
 
             return View();
         }
@@ -35,17 +35,19 @@ namespace SpaceRealty.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult AuthUser(Realtor realtor)
-        {   
+        public IActionResult Home(Realtor realtor)
+        {
+            bool authed = false;
             using (IUserRepository userRep = new UserRepository())
             {
-                if (realtor.email != null)
+                if (realtor.email == null)
                 {
-                    userRep.AuthenticateUser(realtor);
+                    authed = userRep.AuthenticateUser(realtor);
                 }
                 else
                 {
                     userRep.CreateUser(realtor);
+                    authed = true;
                 }
             }
 
@@ -54,7 +56,11 @@ namespace SpaceRealty.Controllers
             {
                 Properties = propRep.PopulateHouses();
             }
-            return View("~/Views/Houses.cshtml", Properties);
+
+            if (authed == true)
+                return View("~/Views/Property/Houses.cshtml", Properties);
+            else
+                return View("~/Views/Home/Login.cshtml");
 
         }
     }
