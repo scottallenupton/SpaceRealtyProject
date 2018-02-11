@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SpaceRealty.Models;
 using SpaceRealty.Repos;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace SpaceRealty.Controllers
 {
@@ -37,26 +34,33 @@ namespace SpaceRealty.Controllers
 
         public IActionResult Home(Realtor realtor)
         {
+            //TODO: Prevent user access into system without authentication
+            //Authenticate User
             bool authed = false;
             using (IUserRepository userRep = new UserRepository())
             {
+                //If email is null, then user is an existing user
                 if (realtor.email == null)
                 {
+                    //Auth existing user
                     authed = userRep.AuthenticateUser(realtor);
                 }
                 else
                 {
+                    //Create new user
                     userRep.CreateUser(realtor);
                     authed = true;
                 }
             }
 
             List<House> Properties;
+            //Retrieve all properties
             using (IPropertyRepository propRep = new PropertyRepository())
             {
                 Properties = propRep.PopulateHouses();
             }
 
+            //Display houses if authenticated
             if (authed == true)
                 return View("~/Views/Property/Houses.cshtml", Properties);
             else

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,5 +24,7 @@ namespace SpaceRealty.Models
         public int LotSize { get; set; }
         public string Description { get; set; }
         public bool Edit { get; set; }
+        public byte[] PhotoData { get; set; }
+        public List<string> Photos { get; set; }
     }
 }

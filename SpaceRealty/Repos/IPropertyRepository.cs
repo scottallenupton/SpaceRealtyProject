@@ -10,6 +10,8 @@ namespace SpaceRealty.Repos
     {
         List<House> PopulateHouses();
         void CreateHouse(House house);
+        void CreatePhoto(byte[] photo, int MLSNum);
+        List<string> SelectPhotos(int MLSNum);
         void EditHouse(House house);
         void DeleteHouse(int MLSnum);
     }

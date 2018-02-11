@@ -61,3 +61,21 @@
         <label>Description:</label>
         @Html.TextAreaFor(m => m.Description)
     </div>
+    <div class="form-group">
+        <label for="fileSelect">Add Photo:</label>
+        <input name="fileSelect" type="file" id="fileSelect" onchange="readURL(this);"/>
+        <img id="thumbnail" />
+    </div>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#thumbnail').attr('src', e.target.result).width(100).height(100);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +18,9 @@ namespace SpaceRealty.Repos
             sqlConn.Open();
         }
         public void CreateHouse(House house)
-        {        
+        {    
+            //TODO: Data validation
+            //Insert new house into database
             if(sqlConn.State == System.Data.ConnectionState.Open)
             {
                 string query = "insert into Houses(MLS, Street1, Street2, City, State, ZipCode, Neighborhood, SalesPrice, DateListed, Bedrooms, Bathrooms," +
@@ -27,20 +30,29 @@ namespace SpaceRealty.Repos
                 SqlCommand cmd = new SqlCommand(query, sqlConn);
                 cmd.ExecuteNonQuery();
             }
+            //If theres a photo added, import photo into photo database
+            if (house.PhotoData != null)
+                CreatePhoto(house.PhotoData, house.MLSNum);
         }
 
         public void DeleteHouse(int MLSNum)
         {
+            //Delete house and photos from database
             if (sqlConn.State == System.Data.ConnectionState.Open)
             {
                 string query = "delete from Houses where MLS = " + MLSNum;
                 SqlCommand cmd = new SqlCommand(query, sqlConn);
+                cmd.ExecuteNonQuery();
+
+                query = "delete from Pictures where MLSNum = " + MLSNum;
+                cmd = new SqlCommand(query, sqlConn);
                 cmd.ExecuteNonQuery();
             }
         }
 
         public List<House> PopulateHouses()
         {
+            //Create House objects
             List<House> Properties = new List<House>();
             if (sqlConn.State == System.Data.ConnectionState.Open)
             {
@@ -87,6 +99,8 @@ namespace SpaceRealty.Repos
 
         public void EditHouse(House house)
         {
+            //TODO: Data validation
+            //Update house in the database
             if (sqlConn.State == System.Data.ConnectionState.Open && house.MLSNum != 0)
             {
                 string query = "update Houses set Street1 = '" + house.Street1 + "', Street2 = '" + house.Street2 + "', City = '" + house.City + "', State = '" +
@@ -96,6 +110,39 @@ namespace SpaceRealty.Repos
                 SqlCommand cmd = new SqlCommand(query, sqlConn);
                 cmd.ExecuteNonQuery();
             }
+            //If theres a photo, add photo in the database
+            if (house.PhotoData != null)
+                CreatePhoto(house.PhotoData, house.MLSNum);
+        }
+
+        public void CreatePhoto(byte[] photo, int MLSNum)
+        {
+            //Create photo in the database
+            if (sqlConn.State == System.Data.ConnectionState.Open)
+            {
+                string query = "insert into Pictures(Id, PhotoData, MLSNum) values ('" + Guid.NewGuid().ToString("N") + "', @byteArray, '" + MLSNum + "')";
+                SqlCommand cmd = new SqlCommand(query, sqlConn);
+                cmd.Parameters.Add("@byteArray", SqlDbType.VarBinary).Value = photo;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public List<string> SelectPhotos(int MLSNum)
+        {
+            //Select photos for this house object
+            List<string> Photos = new List<string>();
+            if (sqlConn.State == System.Data.ConnectionState.Open)
+            {
+                string query = "select * from Pictures where MLSNum = " + MLSNum;
+                SqlCommand cmd = new SqlCommand(query, sqlConn);
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["PhotoData"] != DBNull.Value)
+                        Photos.Add(Convert.ToBase64String(((byte[])reader["PhotoData"]), 0, ((byte[])reader["PhotoData"]).Length));
+                }
+            }
+            return Photos;
         }
 
         //TODO: Properly Dispose
@@ -103,5 +150,6 @@ namespace SpaceRealty.Repos
         {
             sqlConn.Close();
         }
+
     }
 }

@@ -10,6 +10,5 @@ namespace SpaceRealty.Repos
     {
         void CreateUser(Realtor realtor);
         bool AuthenticateUser(Realtor realtor);
-        Realtor RetrieveUser(int id);
     }
 }

@@ -12,7 +12,7 @@
     <title>Property</title>
 </head>
 <body>
-    @using (Html.BeginForm("CreateProperty", "Property", FormMethod.Post))
+    @using (Html.BeginForm("CreateProperty", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div id="createPartial">
             @Html.Partial("_PropertyFields", Model)

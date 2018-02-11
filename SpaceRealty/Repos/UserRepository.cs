@@ -19,6 +19,9 @@ namespace SpaceRealty.Repos
         }
         public void CreateUser(Realtor realtor)
         {
+            //TODO: Data Validation
+            //TODO: Ensure user with the same credentials doesnt already exist
+            //Create user in the database
             if (sqlConn.State == System.Data.ConnectionState.Open)
             {
                 string query = "insert into Realtors(Id, FirstName, LastName, Email, Password, Username) values ('" + Guid.NewGuid().ToString("N") + "','" + realtor.firstName + "','" + realtor.lastName +
@@ -30,6 +33,8 @@ namespace SpaceRealty.Repos
 
         public bool AuthenticateUser(Realtor realtor)
         {
+            //TODO: Once authenticated, persist authentication through the application
+            //Get proper user, decrypt password and validate whether passwords are the same
             if (sqlConn.State == System.Data.ConnectionState.Open)
             {
                 string query = "select * from Realtors where Username = '" + realtor.userName + "'";
@@ -51,13 +56,9 @@ namespace SpaceRealty.Repos
             }
         }
 
-        public Realtor RetrieveUser(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public static string Encryptdata(string password)
         {
+            //Password encryption
             string strmsg = string.Empty;
             byte[] encode = new byte[password.Length];
             encode = Encoding.UTF8.GetBytes(password);
@@ -66,6 +67,7 @@ namespace SpaceRealty.Repos
         }
         public static string Decryptdata(string encryptpwd)
         {
+            //Password decryption
             string decryptpwd = string.Empty;
             UTF8Encoding encodepwd = new UTF8Encoding();
             Decoder Decode = encodepwd.GetDecoder();

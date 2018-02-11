@@ -12,11 +12,19 @@
     <title>Property</title>
 </head>
 <body>
-    @using (Html.BeginForm("EditProperty", "Property", FormMethod.Post))
+    @using (Html.BeginForm("EditProperty", "Property", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div id="editPartial">
             @Html.Partial("_PropertyFields", Model)
-            <input type="submit" value="Edit Property" />
+            <div class="form-group">
+                @foreach (string pic in Model.Photos)
+                {
+                    <img src="data:image/png;base64,@pic" style="width:100px;height:100px;" />
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit Property" />
+            </div>
         </div>
     }
 </body>
